@@ -1,0 +1,13 @@
+{% comment %}
+  ----------------------------------------------------------------------------------
+   Plug in Speed for Shopify
+
+   Copyright (c) 2018 Pemberton Rank Ltd, a company registered in England 7341337
+
+   This file is subject to the license at https://www.pluginspeed.com/eula
+  ----------------------------------------------------------------------------------
+{% endcomment %}
+
+{% if invalidateMinifiedAssetCache == true %}
+  <script async src="https://api-stage.pluginspeed.com/users/{{ licensedTo }}/minified-asset-cache/invalidate?p={{ request.path | url_param_escape }}"></script>
+{% endif %}
