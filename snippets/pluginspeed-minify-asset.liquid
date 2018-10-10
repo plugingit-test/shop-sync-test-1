@@ -16,7 +16,7 @@
 {%- capture metafield_name -%}{{ asset | replace: '.','-' | md5 | truncate: 30, "" }}{%- endcapture -%}
 
 {%- assign have_minified = false -%}
-{%- if current_key == shop.metafields.pluginspeed.[metafield_name] -%}
+{%- if current_key == shop.metafields.pluginspeed[metafield_name] -%}
   {%- assign have_minified = true -%}
 {%- endif -%}
 
@@ -45,9 +45,9 @@
    asset         : {{ asset }}
    inline        : {{ inline }}
    current_key   : {{ current_key }}
-   metafields    : {{ shop.metafields.pluginspeed. }}
+   metafields    : {{ shop.metafields.pluginspeed }}
    metafield_name: shop.metafields.pluginspeed.{{ metafield_name }}
-   metafield_key : {{ shop.metafields.pluginspeed.[metafield_name] }}
+   metafield_key : {{ shop.metafields.pluginspeed[metafield_name] }}
    tag           : {{ tag }}
    have_minified : {{ have_minified }}
    target_asset  : {{ target_asset }}
@@ -59,7 +59,6 @@
 {%- assign data_attributes = '' -%}
 {%- unless have_minified == true and asset_exists == true -%}
   {%- capture data_attributes -%}data-pluginspeed-minifier data-asset="{{ asset }}" data-key="{{ current_key }}"{%- endcapture -%}
-  <script type="text/template">Plug in Speed: The following {{ tag }} is now being minified. Wait 1 minute and then refresh the page.</script>
 {%- endunless -%}
 
 {%- unless have_minified == true and asset_exists == true -%}
@@ -69,19 +68,13 @@
 {%- if tag == 'stylesheet' -%}
   {%- if have_minified == true and inline == true and asset_exists == true -%}
     <style>{%- include target_asset -%}</style>
-  {%- elsif have_minified == true and asset_exists == true -%}
-    <link href="{{ target_asset | asset_url }}" rel="stylesheet" type="text/css" media="all" {{ data_attributes }} />
-  {%- else -%}
-    <link href="{{ asset | asset_url }}" rel="stylesheet" type="text/css" media="all" {{ data_attributes }} />
+  {%- elsif liquid_tag == true -%}
+    {{ target_asset | asset_url | stylesheet_tag }}
   {%- endif -%}
 {%- elsif tag == 'script' -%}
   {%- if have_minified == true and inline == true and asset_exists == true -%}
     <script>{%- include target_asset -%}</script>
-  {%- elsif defer == true -%}
-    <script src="{{ target_asset | asset_url }}" {{ data_attributes }} defer="defer"></script>
-  {%- elsif async == true -%}
-    <script src="{{ target_asset | asset_url }}" {{ data_attributes }} async="async"></script>
-  {%- else -%}
-    <script src="{{ target_asset | asset_url }}" {{ data_attributes }}></script>
+  {%- elsif liquid_tag == true -%}
+    {{ target_asset | asset_url | script_tag }}
   {%- endif -%}
 {%- endif -%}

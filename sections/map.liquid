@@ -1,4 +1,4 @@
-{% assign display_map = false %}
+{%- assign display_map = false -%}
 {%- assign onboarding = false -%}
 {%- assign bg_image = section.settings.background_image -%}
 
@@ -15,7 +15,7 @@
     background-position: {{ section.settings.background_image_position }};
   }
 
-  @media only screen and (max-width: 769px) {
+  @media only screen and (max-width: 750px) {
     #MapSection--{{ section.id }} .map-section__image {
       padding-top: {{ 1 | divided_by: bg_image.aspect_ratio | times: 100 }}%;
     }
@@ -23,32 +23,29 @@
   {% endif %}
 </style>
 
+
 <div id="MapSection--{{ section.id }}"
      class="map-section
-          {% if display_map %}map-section--display-map{% endif %}
-          {% if onboarding == true %}map-section--onboarding{% endif %}"
+           {% if display_map %}map-section--display-map{% endif %}
+           {% if onboarding == true %}map-section--onboarding{% endif %}"
      data-section-id="{{ section.id }}"
      data-section-type="map">
-  <div class="wrapper map-section__wrapper">
-    <div class="map-section__content-wrapper flex--third">
+  <div class="page-width map-section__wrapper">
+    <div class="map-section__content-wrapper">
       <div class="map-section__content">
         {% if section.settings.heading != blank %}
           <h3 class="h4">{{ section.settings.heading | escape }}</h3>
         {% endif %}
         {% if section.settings.address != blank %}
-          <div class="rte">{{ section.settings.address }}</div>
+          <div class="rte-setting">{{ section.settings.address }}</div>
           {% if section.settings.map_address != blank and section.settings.button_text != blank %}
             <p>
               <a href="https://maps.google.com?daddr={{ section.settings.map_address | escape }}"
-                 class="btn btn--secondary map_section__directions-btn"
+                 class="btn btn--secondary btn--small map_section__directions-btn"
                  target="_blank"
               >
-                {% if section.settings.show_pin %}
-                  <span class="icon icon-pin" aria-hidden="true"></span>
-                {% endif %}
-                {% if section.settings.button_text %}
-                  <span>{{ section.settings.button_text | escape }}</span>
-                {% endif %}
+                {% if section.settings.show_pin %}{% include 'icon-pin' %}{% endif %}
+                <span>{{ section.settings.button_text | escape }}</span>
               </a>
             </p>
           {% endif %}
@@ -56,7 +53,7 @@
       </div>
     </div>
     <div class="map-section__background-wrapper">
-      {% if bg_image.src != blank %}
+      {% if bg_image != blank %}
         <div class="map-section__image lazyload js"
              data-bgset="{% include 'bgset', image: bg_image %}"
              data-sizes="auto"
@@ -87,7 +84,7 @@
 {% schema %}
   {
     "name": "Map",
-    "class": "index-section index-map-section",
+    "class": "index-section index-section--flush-medium-up",
     "settings": [
       {
         "type": "header",
